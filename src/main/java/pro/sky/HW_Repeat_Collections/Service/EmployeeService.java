@@ -9,7 +9,7 @@ public interface EmployeeService {
     Employee addEmployee(String firstName, String lastName, int department, double salary);
 
     // Метод, который удаляет сотрудника.
-    Employee deleteEmployee(String firstName, String lastName, int department, int salary);
+    Employee deleteEmployee(String firstName, String lastName, int department, double salary);
 
     // Метод, который ищет и выдает данные сотрудника
     Employee getEmployee(String firstName, String lastName, int department, double salary);

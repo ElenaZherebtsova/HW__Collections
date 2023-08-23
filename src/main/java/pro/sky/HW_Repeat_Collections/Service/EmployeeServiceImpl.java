@@ -53,7 +53,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 // то выдаем ошибку, что сотрудник не был найден.
 
     @Override
-    public Employee deleteEmployee(String firstName, String lastName, int department, int salary) {
+    public Employee deleteEmployee(String firstName, String lastName, int department, double salary) {
         String key = generateKey(firstName, lastName );
         Employee employee = employees.remove(key);
         if (employee == null) {

@@ -26,7 +26,7 @@ public class DepartmentController {
     }
 
     @GetMapping(value = "/all", params = "department")
-    public Collection<Integer, List<Employee>> getAllByDepartment(@RequestParam int department) {
+    public Collection<Employee> getAllByDepartment(@RequestParam int department) {
         return departmentService.getAllByDepartment(department);
     }
 
