@@ -1,9 +1,9 @@
-package pro.sky.HW_Repeat_Collections;
+package pro.sky.HW_Repeat_Collections.Service;
 
-import DTO.Employee;
-import Exceptions.EmployeeAlreadyAddedException;
-import Exceptions.EmployeeNotFoundException;
-import Exceptions.EmployeeStorageIsFullException;
+import pro.sky.HW_Repeat_Collections.DTO.Employee;
+import pro.sky.HW_Repeat_Collections.Exceptions.EmployeeAlreadyAddedException;
+import pro.sky.HW_Repeat_Collections.Exceptions.EmployeeNotFoundException;
+import pro.sky.HW_Repeat_Collections.Exceptions.EmployeeStorageIsFullException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -22,7 +22,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     // Метод, который добавляет нового сотрудника.
     @Override
-    public Employee addEmployee(String firstName, String lastName) {
+    public Employee addEmployee(String firstName,
+                                String lastName,
+                                int department,
+                                double salary) {
 // Если превышен размер мапы, то выбрасываем ошибку о переполненном хранилище.
 // Если поймается ошибка, сработает if, если нет -- код пойдет дальше.
 // После создания сотрудника проверяем, и если он уже есть -- выбрасываем ошибку.
@@ -34,7 +37,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new EmployeeStorageIsFullException();
         }
         String key = generateKey(firstName, lastName);
-        Employee employee = new Employee(firstName, lastName);
+        Employee employee = new Employee(firstName, lastName, department, salary);
         if (employees.containsKey(key)) {
             throw new EmployeeAlreadyAddedException();
         }
@@ -50,7 +53,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 // то выдаем ошибку, что сотрудник не был найден.
 
     @Override
-    public Employee deleteEmployee(String firstName, String lastName) {
+    public Employee deleteEmployee(String firstName, String lastName, int department, int salary) {
         String key = generateKey(firstName, lastName );
         Employee employee = employees.remove(key);
         if (employee == null) {
@@ -65,7 +68,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 // Если найден -- возвращаем данные этого сотрудника.
 
     @Override
-    public Employee getEmployee(String firstName, String lastName) {
+    public Employee getEmployee(String firstName, String lastName, int departmet, double salary) {
         String key = generateKey(firstName, lastName);
         Employee employee = employees.get(key);
         if (employee == null) {

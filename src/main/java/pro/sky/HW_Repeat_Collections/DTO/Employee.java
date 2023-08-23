@@ -1,23 +1,33 @@
-package DTO;
+package pro.sky.HW_Repeat_Collections.DTO;
 
 import java.util.Objects;
 
 public class Employee {
     private String firstName;
     private String lastName;
+    private int department;
+    private double salary;
 
+    public int getDepartment() { return department; }
+    public double getSalary() { return salary; }
     public String getFirstName() {
         return firstName;
     }
-
     public String getLastName() {
         return lastName;
     }
 
-    public Employee(String firstName, String lastName) {
+    public Employee(String firstName,
+                    String lastName,
+                    int department,
+                    double salary) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.department = department;
+        this.salary = salary;
     }
+
+
 
     @Override
     public boolean equals(Object o) {
