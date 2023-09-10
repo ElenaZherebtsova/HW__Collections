@@ -1,5 +1,6 @@
 package pro.sky.HW_Repeat_Collections.Service;
 
+import org.apache.commons.lang3.StringUtils;
 import pro.sky.HW_Repeat_Collections.DTO.Employee;
 import pro.sky.HW_Repeat_Collections.Exceptions.EmployeeAlreadyAddedException;
 import pro.sky.HW_Repeat_Collections.Exceptions.EmployeeNotFoundException;
@@ -37,7 +38,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new EmployeeStorageIsFullException();
         }
         String key = generateKey(firstName, lastName);
-        Employee employee = new Employee(firstName, lastName, department, salary);
+        Employee employee = new Employee(
+                StringUtils.capitalize(firstName),
+                StringUtils.capitalize(lastName) , department, salary);
         if (employees.containsKey(key)) {
             throw new EmployeeAlreadyAddedException();
         }
@@ -87,4 +90,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     private String generateKey (String firstName, String lastName) {
        return firstName + lastName;
     }
+
+
+
+
 }

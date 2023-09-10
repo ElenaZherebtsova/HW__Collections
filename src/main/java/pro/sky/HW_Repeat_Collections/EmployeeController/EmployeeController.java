@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pro.sky.HW_Repeat_Collections.Service.EmployeeService;
+import pro.sky.HW_Repeat_Collections.Service.NameValidator;
 
 import java.util.Collection;
+import java.util.NavigableMap;
 
 @RestController
 @RequestMapping("/employee")
@@ -24,6 +26,8 @@ public class EmployeeController {
                                 @RequestParam String lastName,
                                 @RequestParam int department,
                                 @RequestParam double salary) {
+        NameValidator.validateName(firstName, lastName);
+       // NameValidator.validateName(lastName);
         return employeeService.addEmployee(firstName, lastName, department, salary);
 
     }
@@ -33,6 +37,8 @@ public class EmployeeController {
                                    @RequestParam String lastName,
                                    @RequestParam int department,
                                    @RequestParam double salary) {
+        NameValidator.validateName(firstName, lastName);
+
         return employeeService.deleteEmployee(firstName, lastName, department, salary);
     }
     @GetMapping("/get")
@@ -40,6 +46,8 @@ public class EmployeeController {
                                 @RequestParam String lastName,
                                 @RequestParam int department,
                                 @RequestParam double salary) {
+        NameValidator.validateName(firstName, lastName);
+
         return employeeService.getEmployee(firstName, lastName, department, salary);
     }
 
