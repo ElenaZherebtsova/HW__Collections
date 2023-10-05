@@ -1,14 +1,26 @@
 package pro.sky.HW_Repeat_Collections.Service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pro.sky.HW_Repeat_Collections.DTO.Employee;
 import pro.sky.HW_Repeat_Collections.Exceptions.EmployeeAlreadyAddedException;
+import pro.sky.HW_Repeat_Collections.Exceptions.EmployeeNotFoundException;
 import pro.sky.HW_Repeat_Collections.Exceptions.EmployeeStorageIsFullException;
+
+import java.util.Collection;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class EmployeeServiceImplTest {
-    private EmployeeServiceImpl underTest = new EmployeeServiceImpl();
+    private EmployeeServiceImpl underTest;
+
+    @BeforeEach
+    void beforeEach() {
+        underTest = new EmployeeServiceImpl();
+    }
+
+
     private Employee expectedEmployee = new Employee("Kate",
             "Ivanova", 4, 50_000);
 
@@ -36,10 +48,10 @@ class EmployeeServiceImplTest {
 //    Через цикл забиваем мапу тремя значениями и добавляем 4-го.
     void addEmployee_shouldThrowExceptionIfNotEnoughMapSize() {
         for (int i = 0; i < 3; i++) {
-            underTest.addEmployee((expectedEmployee.getFirstName()+i),
-                                  (expectedEmployee.getLastName()+i),
-                                  (expectedEmployee.getDepartment()),
-                                  (expectedEmployee.getSalary()));
+            underTest.addEmployee((expectedEmployee.getFirstName() + i),
+                    (expectedEmployee.getLastName() + i),
+                    (expectedEmployee.getDepartment()),
+                    (expectedEmployee.getSalary()));
         }
 
         assertThrows(EmployeeStorageIsFullException.class,
@@ -60,22 +72,90 @@ class EmployeeServiceImplTest {
                 expectedEmployee.getSalary());
         assertThrows(EmployeeAlreadyAddedException.class,
                 () -> underTest.addEmployee(expectedEmployee.getFirstName(),
-                              expectedEmployee.getLastName(),
-                              expectedEmployee.getDepartment(),
-                              expectedEmployee.getSalary()));
+                        expectedEmployee.getLastName(),
+                        expectedEmployee.getDepartment(),
+                        expectedEmployee.getSalary()));
     }
 
-
-
+    //Тест, который проверяет, что удалился нужный сотрудник.
     @Test
-    void deleteEmployee() {
+    void deleteEmployee_shouldDeleteEmployeeAndReturn() {
+        Employee result = underTest.addEmployee(expectedEmployee.getFirstName(),
+                expectedEmployee.getLastName(),
+                expectedEmployee.getDepartment(),
+                expectedEmployee.getSalary());
+        underTest.deleteEmployee(expectedEmployee.getFirstName(),
+                expectedEmployee.getLastName(),
+                expectedEmployee.getDepartment(),
+                expectedEmployee.getSalary());
+        assertEquals(expectedEmployee, result);
+
+
     }
 
+    //Тест, проверяющий ошибку, если удаляемый сотрудник не найден
     @Test
-    void getEmployee() {
+    void deleteEmployee_shouldThrowExceptionIfEmployeeNotFound() {
+        underTest.addEmployee(expectedEmployee.getFirstName(),
+                expectedEmployee.getLastName(),
+                expectedEmployee.getDepartment(),
+                expectedEmployee.getSalary());
+        assertThrows(EmployeeNotFoundException.class,
+                () -> underTest.deleteEmployee(expectedEmployee.getFirstName() + "a",
+                        expectedEmployee.getLastName() + "b",
+                        expectedEmployee.getDepartment(),
+                        expectedEmployee.getSalary()));
     }
 
+    //Тест, проверяющий что добавленный сотрудник получен и совпадает с ожидаемым результатом.
     @Test
-    void printAll() {
+    void getEmployee_shouldGetEmployeeAndReturn() {
+        Employee result = underTest.addEmployee(expectedEmployee.getFirstName(),
+                expectedEmployee.getLastName(),
+                expectedEmployee.getDepartment(),
+                expectedEmployee.getSalary());
+        underTest.getEmployee(expectedEmployee.getFirstName(),
+                expectedEmployee.getLastName(),
+                expectedEmployee.getDepartment(),
+                expectedEmployee.getSalary());
+        assertEquals(expectedEmployee, result);
+    }
+
+    //    Тест, проверяющий наличие ошибки, если получаемый сотрудник не найден.
+    @Test
+    void getEmployee_shouldThrowExceptionIfEmployeeNotFound() {
+        underTest.addEmployee(expectedEmployee.getFirstName(),
+                expectedEmployee.getLastName(),
+                expectedEmployee.getDepartment(),
+                expectedEmployee.getSalary());
+        assertThrows(EmployeeNotFoundException.class,
+                () -> underTest.getEmployee(expectedEmployee.getFirstName() + "a",
+                        expectedEmployee.getLastName() + "b",
+                        expectedEmployee.getDepartment(),
+                        expectedEmployee.getSalary()));
+    }
+
+//    Проверяем, что список всех сотрудников выводистя правильно.
+    @Test
+    void printAll_shoudReturnEmployesList() {
+        Employee employee2 = new Employee("Hank", "Moody", 2, 70_000);
+        underTest.addEmployee(expectedEmployee.getFirstName(),
+                expectedEmployee.getLastName(),
+                expectedEmployee.getDepartment(),
+                expectedEmployee.getSalary());
+        underTest.addEmployee(employee2.getFirstName(),
+                employee2.getLastName(),
+                employee2.getDepartment(),
+                employee2.getSalary());
+        Collection<Employee> result = underTest.printAll();
+        assertTrue(result.containsAll(List.of(expectedEmployee, employee2)));
+    }
+// Проверяем, сто при пустом списке -- нет ошибок,
+// и возвращается пустой список.
+    @Test
+    void printAll_shouldReturnEmptyListIfEmployeesNotInMap() {
+        Collection<Employee> all = underTest.printAll();
+        assertTrue(all.isEmpty());
+
     }
 }
